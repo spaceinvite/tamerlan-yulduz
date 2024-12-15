@@ -2,52 +2,53 @@ import { useState, useEffect, useRef } from 'react';
 
 import styles from './StartBlock.module.scss';
 import video from '../../assets/video/video.mp4';
-import audio from '../../assets/audio/audio.mp3';
 
-const MusicBtn = () => {
-	const audioRef = useRef(null);
-
-	const [isPlaying, setIsPlaying] = useState(false);
-
-	const togglePlay = () => {
-		if (audioRef.current.paused) {
-			audioRef.current.play();
-			setIsPlaying(true);
-		} else {
-			audioRef.current.pause();
-			setIsPlaying(false);
-		}
-	};
-
-	useEffect(() => {
-		if (audioRef.current) {
-			audioRef.current.volume = 0.3;
-		}
-	});
-
+const MusicBtn = ({ isAudioPlaying, toggleAudio }) => {
 	return (
-		<>
-			<button
-				className={styles['music-btn']}
-				type='button'
-				onClick={togglePlay}
-			>
-				{isPlaying ? 'выключить музыку' : 'включить музыку'}
-			</button>
-			<audio src={audio} ref={audioRef} autoPlay loop controls hidden />
-		</>
+		<button className={styles['music-btn']} type='button' onClick={toggleAudio}>
+			{isAudioPlaying ? 'выключить музыку' : 'включить музыку'}
+		</button>
 	);
 };
 
 export const StartBlock = () => {
 	const videoRef = useRef(null);
+	const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+	const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+	const [posterImage, setPosterImage] = useState(null);
+
+	const toggleAudio = () => {
+		if (videoRef.current) {
+			if (!isVideoPlaying) {
+				videoRef.current.play().catch(err => {
+					console.error('AutoPlay error:', err);
+				});
+				setIsVideoPlaying(true);
+			}
+
+			if (videoRef.current.muted) {
+				videoRef.current.muted = false;
+				setIsAudioPlaying(true);
+			} else {
+				videoRef.current.muted = true;
+				setIsAudioPlaying(false);
+			}
+		}
+	};
 
 	useEffect(() => {
 		if (videoRef.current) {
-			videoRef.current.muted = true;
-			videoRef.current.play().catch(err => {
-				console.error('AutoPlay error:', err);
-			});
+			videoRef.current.onloadeddata = () => {
+				const canvas = document.createElement('canvas');
+				const context = canvas.getContext('2d');
+
+				canvas.width = videoRef.current.videoWidth;
+				canvas.height = videoRef.current.videoHeight;
+				context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
+
+				const imageUrl = canvas.toDataURL();
+				setPosterImage(imageUrl);
+			};
 		}
 	}, []);
 
@@ -55,12 +56,11 @@ export const StartBlock = () => {
 		<div className={styles.block}>
 			<video
 				className={styles.block__video}
-				autoPlay
 				muted
 				loop
 				playsInline
 				preload='auto'
-				poster='../../assets/img/main-bg.jpg'
+				poster={posterImage}
 				ref={videoRef}
 			>
 				<source src={video} type='video/mp4' />
@@ -70,7 +70,7 @@ export const StartBlock = () => {
 				<div className={styles.block__top}>
 					<p className={styles.block__text}>WEDDING DAY</p>
 
-					<MusicBtn />
+					<MusicBtn isAudioPlaying={isAudioPlaying} toggleAudio={toggleAudio} />
 				</div>
 
 				<p
