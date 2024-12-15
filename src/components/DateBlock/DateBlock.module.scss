@@ -1,0 +1,28 @@
+@use '../../assets/scss/main.scss' as *;
+
+.block {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	align-self: center;
+
+	padding: 2px;
+	width: fit-content;
+	height: fit-content;
+	border-radius: 20px;
+	background: var(--bg-color-dark);
+
+	&__date {
+		padding: 10px 20px;
+		background: var(--bg-color-dark);
+		border-radius: 20px;
+		border: 1px dashed var(--text-color-light);
+
+		font-family: var(--font-family);
+		font-weight: 400;
+		font-size: 30px;
+		letter-spacing: 0.1em;
+		text-align: center;
+		color: var(--text-color-light);
+	}
+}

@@ -1,0 +1,143 @@
+@use '../../assets/scss/main.scss' as *;
+
+.block {
+	margin: 0 20px;
+	padding: 4px;
+	width: calc(100% - 40px);
+	border-radius: 40px;
+	background: var(--bg-color-dark);
+	z-index: 2;
+
+	&__content {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		row-gap: 30px;
+		padding: 40px 20px;
+
+		width: 100%;
+		border: 1px dashed var(--text-color-light);
+		border-radius: 40px;
+	}
+
+	&__title {
+		font-family: var(--font-family);
+		font-weight: 400;
+		font-size: 30px;
+		text-align: center;
+		color: var(--text-color-light);
+	}
+
+	&__text {
+		font-family: var(--third-family);
+		font-weight: 400;
+		font-size: 24px;
+		line-height: 137%;
+		text-align: center;
+		color: var(--text-color-light);
+	}
+
+	&__form {
+		display: flex;
+		flex-direction: column;
+		row-gap: 20px;
+	}
+
+	&__btn {
+		width: 100%;
+		height: 50px;
+		border-radius: 14px;
+		background: var(--text-color-light);
+
+		font-family: var(--third-family);
+		font-weight: 400;
+		font-size: 24px;
+		line-height: 137%;
+		text-align: center;
+		color: var(--text-color-dark);
+	}
+}
+
+.input {
+	display: flex;
+	flex-direction: column;
+
+	align-items: start;
+	row-gap: 10px;
+
+	label {
+		font-family: var(--third-family);
+		font-weight: 400;
+		font-size: 24px;
+		line-height: 137%;
+		text-align: center;
+		color: var(--text-color-light);
+	}
+
+	input {
+		border-bottom: 1px solid var(--text-color-light);
+		width: 100%;
+		height: 40px;
+
+		font-family: var(--third-family);
+		font-weight: 400;
+		font-size: 24px;
+		line-height: 137%;
+		color: var(--text-color-light);
+
+		&::placeholder {
+			color: rgba(255, 255, 255, 0.3);
+		}
+	}
+}
+
+.presence {
+	display: flex;
+	flex-direction: column;
+	row-gap: 10px;
+
+	&__text {
+		font-family: var(--third-family);
+		font-weight: 400;
+		font-size: 24px;
+		line-height: 137%;
+		color: var(--text-color-light);
+	}
+
+	&__label {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		column-gap: 10px;
+		cursor: pointer;
+	}
+
+	&__input {
+		display: none;
+
+		&:checked + .presence__radio::before {
+			transform: translate(-50%, -50%) scale(1);
+		}
+	}
+
+	&__radio {
+		position: relative;
+		width: 20px;
+		height: 20px;
+		border-radius: 50%;
+		border: 1px solid var(--text-color-light);
+
+		&::before {
+			content: '';
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			transform: translate(-50%, -50%) scale(0);
+			transition: all 0.3s ease-in-out;
+			width: 12px;
+			height: 12px;
+			border-radius: 50%;
+			background: var(--text-color-light);
+		}
+	}
+}
