@@ -60,6 +60,7 @@ export const StartBlock = () => {
 				loop
 				playsInline
 				preload='auto'
+				poster='../../assets/img/main-bg.jpg'
 				ref={videoRef}
 			>
 				<source src={video} type='video/mp4' />
