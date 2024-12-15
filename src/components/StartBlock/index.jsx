@@ -2,11 +2,16 @@ import { useState, useEffect, useRef } from 'react';
 
 import styles from './StartBlock.module.scss';
 import video from '../../assets/video/video.mp4';
+import preview from '../../assets/img/main-bg.jpg';
 
-const MusicBtn = ({ isAudioPlaying, toggleAudio }) => {
+const MusicBtn = ({ isAudioPlaying, isVideoPlaying, toggleAudio }) => {
 	return (
 		<button className={styles['music-btn']} type='button' onClick={toggleAudio}>
-			{isAudioPlaying ? 'выключить музыку' : 'включить музыку'}
+			{isVideoPlaying
+				? isAudioPlaying
+					? 'выключить музыку'
+					: 'включить музыку'
+				: 'включить видео'}
 		</button>
 	);
 };
@@ -15,7 +20,6 @@ export const StartBlock = () => {
 	const videoRef = useRef(null);
 	const [isAudioPlaying, setIsAudioPlaying] = useState(false);
 	const [isVideoPlaying, setIsVideoPlaying] = useState(false);
-	const [posterImage, setPosterImage] = useState(null);
 
 	const toggleAudio = () => {
 		if (videoRef.current) {
@@ -36,22 +40,6 @@ export const StartBlock = () => {
 		}
 	};
 
-	useEffect(() => {
-		if (videoRef.current) {
-			videoRef.current.onloadeddata = () => {
-				const canvas = document.createElement('canvas');
-				const context = canvas.getContext('2d');
-
-				canvas.width = videoRef.current.videoWidth;
-				canvas.height = videoRef.current.videoHeight;
-				context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
-
-				const imageUrl = canvas.toDataURL();
-				setPosterImage(imageUrl);
-			};
-		}
-	}, []);
-
 	return (
 		<div className={styles.block}>
 			<video
@@ -60,7 +48,7 @@ export const StartBlock = () => {
 				loop
 				playsInline
 				preload='auto'
-				poster={posterImage}
+				poster={preview}
 				ref={videoRef}
 			>
 				<source src={video} type='video/mp4' />
@@ -70,7 +58,11 @@ export const StartBlock = () => {
 				<div className={styles.block__top}>
 					<p className={styles.block__text}>WEDDING DAY</p>
 
-					<MusicBtn isAudioPlaying={isAudioPlaying} toggleAudio={toggleAudio} />
+					<MusicBtn
+						isAudioPlaying={isAudioPlaying}
+						isVideoPlaying={isVideoPlaying}
+						toggleAudio={toggleAudio}
+					/>
 				</div>
 
 				<p
